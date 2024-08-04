@@ -4,120 +4,127 @@ function toggleMenu() {
     navLinks.classList.toggle('active');
 }
 
-  // Slider functionality
-  let currentSlideIndex = 0;
-  const slides = document.querySelectorAll('.slide');
-  const dots = document.querySelectorAll('.dot');
-  const sliderContainer = document.querySelector('.slider-container');
+let currentSlideIndex = 0;
+const slides = document.querySelectorAll('.slide');
+const dots = document.querySelectorAll('.dot');
+const sliderContainer = document.querySelector('.slider-container');
 
-  let isDragging = false;
-  let startPos = 0;
-  let currentTranslate = 0;
-  let prevTranslate = 0;
-  let animationID;
+let isDragging = false;
+let startPos = 0;
+let currentTranslate = 0;
+let prevTranslate = 0;
+let animationID;
+let autoMoveInterval;
 
-  function showSlide(index) {
-      if (index >= slides.length) {
-          currentSlideIndex = 0;
-      } else if (index < 0) {
-          currentSlideIndex = slides.length - 1;
-      } else {
-          currentSlideIndex = index;
-      }
-      updateSlider();
-  }
+function showSlide(index) {
+    if (index >= slides.length) {
+        currentSlideIndex = 0;
+    } else if (index < 0) {
+        currentSlideIndex = slides.length - 1;
+    } else {
+        currentSlideIndex = index;
+    }
+    updateSlider();
+}
 
-  function updateSlider() {
-      currentTranslate = currentSlideIndex * -slides[0].clientWidth;
-      sliderContainer.style.transform = `translateX(${currentTranslate}px)`;
-      updateDots();
-  }
+function updateSlider() {
+    currentTranslate = currentSlideIndex * -slides[0].clientWidth;
+    sliderContainer.style.transform = `translateX(${currentTranslate}px)`;
+    updateDots();
+}
 
-  function updateDots() {
-      const activeIndex = Math.round(Math.abs(currentTranslate) / slides[0].clientWidth);
-      dots.forEach((dot, index) => {
-          dot.classList.toggle('active', index === activeIndex);
-      });
-      currentSlideIndex = activeIndex; // Update the current slide index
-  }
+function updateDots() {
+    const activeIndex = Math.round(Math.abs(currentTranslate) / slides[0].clientWidth);
+    dots.forEach((dot, index) => {
+        dot.classList.toggle('active', index === activeIndex);
+    });
+    currentSlideIndex = activeIndex; // Update the current slide index
+}
 
-  function currentSlide(index) {
-      showSlide(index);
-  }
+function currentSlide(index) {
+    showSlide(index);
+}
 
-  function startAutoMove() {
-      setInterval(() => {
-          showSlide(currentSlideIndex + 1);
-      }, 3000); // Change slide every 3 seconds
-  }
+function startAutoMove() {
+    autoMoveInterval = setInterval(() => {
+        showSlide(currentSlideIndex + 1);
+    }, 3000); // Change slide every 3 seconds
+}
 
-  // Start auto move
-  startAutoMove();
+function stopAutoMove() {
+    clearInterval(autoMoveInterval);
+}
 
-  // Touch and Mouse Events
-  function startDrag(event) {
-      isDragging = true;
-      startPos = getPositionX(event);
-      animationID = requestAnimationFrame(animation);
-  }
+// Start auto move
+startAutoMove();
 
-  function endDrag() {
-      isDragging = false;
-      cancelAnimationFrame(animationID);
+// Touch and Mouse Events
+function startDrag(event) {
+    isDragging = true;
+    startPos = getPositionX(event);
+    animationID = requestAnimationFrame(animation);
+    stopAutoMove(); // Stop auto move on user interaction
+}
 
-      const movedBy = currentTranslate - prevTranslate;
+function endDrag() {
+    isDragging = false;
+    cancelAnimationFrame(animationID);
 
-      if (movedBy < -100 && currentSlideIndex < slides.length - 1) {
-          currentSlideIndex += 1;
-      }
-      if (movedBy > 100 && currentSlideIndex > 0) {
-          currentSlideIndex -= 1;
-      }
+    const movedBy = currentTranslate - prevTranslate;
 
-      setPositionByIndex();
-      updateDots(); // Ensure dots are updated after drag ends
-  }
+    if (movedBy < -100 && currentSlideIndex < slides.length - 1) {
+        currentSlideIndex += 1;
+    }
+    if (movedBy > 100 && currentSlideIndex > 0) {
+        currentSlideIndex -= 1;
+    }
 
-  function drag(event) {
-      if (isDragging) {
-          const currentPosition = getPositionX(event);
-          currentTranslate = prevTranslate + currentPosition - startPos;
-          setSliderPosition();
-      }
-  }
+    setPositionByIndex();
+    updateDots(); // Ensure dots are updated after drag ends
+    startAutoMove(); // Restart auto move after user interaction
+}
 
-  function getPositionX(event) {
-      return event.type.includes('mouse') ? event.pageX : event.touches[0].clientX;
-  }
+function drag(event) {
+    if (isDragging) {
+        const currentPosition = getPositionX(event);
+        currentTranslate = prevTranslate + currentPosition - startPos;
+        setSliderPosition();
+    }
+}
 
-  function animation() {
-      setSliderPosition();
-      if (isDragging) requestAnimationFrame(animation);
-  }
+function getPositionX(event) {
+    return event.type.includes('mouse') ? event.pageX : event.touches[0].clientX;
+}
 
-  function setSliderPosition() {
-      sliderContainer.style.transform = `translateX(${currentTranslate}px)`;
-      updateDots(); // Update dots during dragging
-  }
+function animation() {
+    setSliderPosition();
+    if (isDragging) requestAnimationFrame(animation);
+}
 
-  function setPositionByIndex() {
-      currentTranslate = currentSlideIndex * -slides[0].clientWidth;
-      prevTranslate = currentTranslate;
-      setSliderPosition();
-  }
+function setSliderPosition() {
+    sliderContainer.style.transform = `translateX(${currentTranslate}px)`;
+    updateDots(); // Update dots during dragging
+}
 
-  // Add event listeners for touch and mouse events
-  sliderContainer.addEventListener('touchstart', startDrag);
-  sliderContainer.addEventListener('touchend', endDrag);
-  sliderContainer.addEventListener('touchmove', drag);
+function setPositionByIndex() {
+    currentTranslate = currentSlideIndex * -slides[0].clientWidth;
+    prevTranslate = currentTranslate;
+    setSliderPosition();
+}
 
-  sliderContainer.addEventListener('mousedown', startDrag);
-  sliderContainer.addEventListener('mouseup', endDrag);
-  sliderContainer.addEventListener('mouseleave', endDrag);
-  sliderContainer.addEventListener('mousemove', drag);
+// Add event listeners for touch and mouse events
+sliderContainer.addEventListener('touchstart', startDrag);
+sliderContainer.addEventListener('touchend', endDrag);
+sliderContainer.addEventListener('touchmove', drag);
 
-  window.addEventListener('resize', updateSlider);
-  updateSlider();
+sliderContainer.addEventListener('mousedown', startDrag);
+sliderContainer.addEventListener('mouseup', endDrag);
+sliderContainer.addEventListener('mouseleave', endDrag);
+sliderContainer.addEventListener('mousemove', drag);
+
+window.addEventListener('resize', updateSlider);
+updateSlider();
+
 
 // second slider
 document.addEventListener("DOMContentLoaded", function() {
