@@ -4,122 +4,120 @@ function toggleMenu() {
     navLinks.classList.toggle('active');
 }
 
+  // Slider functionality
+  let currentSlideIndex = 0;
+  const slides = document.querySelectorAll('.slide');
+  const dots = document.querySelectorAll('.dot');
+  const sliderContainer = document.querySelector('.slider-container');
 
+  let isDragging = false;
+  let startPos = 0;
+  let currentTranslate = 0;
+  let prevTranslate = 0;
+  let animationID;
 
-// Home section function
-function learnMore() {
-    alert("More information will be available soon!");
-}
+  function showSlide(index) {
+      if (index >= slides.length) {
+          currentSlideIndex = 0;
+      } else if (index < 0) {
+          currentSlideIndex = slides.length - 1;
+      } else {
+          currentSlideIndex = index;
+      }
+      updateSlider();
+  }
 
-// Slider functionality
-let currentSlideIndex = 0;
-const slides = document.querySelectorAll('.slide');
-const dots = document.querySelectorAll('.dot');
-const sliderContainer = document.querySelector('.slider-container');
+  function updateSlider() {
+      currentTranslate = currentSlideIndex * -slides[0].clientWidth;
+      sliderContainer.style.transform = `translateX(${currentTranslate}px)`;
+      updateDots();
+  }
 
-let isDragging = false;
-let startPos=0;
-let currentTranslate=0;
-let prevTranslate=0;
-let animationID;
+  function updateDots() {
+      const activeIndex = Math.round(Math.abs(currentTranslate) / slides[0].clientWidth);
+      dots.forEach((dot, index) => {
+          dot.classList.toggle('active', index === activeIndex);
+      });
+      currentSlideIndex = activeIndex; // Update the current slide index
+  }
 
-function showSlide(index) {
-    if (index >= slides.length) {
-        currentSlideIndex = 0;
-    } else if (index < 0) {
-        currentSlideIndex = slides.length - 1;
-    } else {
-        currentSlideIndex = index;
-    }
-    updateSlider();
-}
+  function currentSlide(index) {
+      showSlide(index);
+  }
 
-function updateSlider() {
-    currentTranslate = currentSlideIndex * -slides[0].clientWidth;
-    sliderContainer.style.transform = `translateX(${currentTranslate}px)`;
-    updateDots();
-}
+  function startAutoMove() {
+      setInterval(() => {
+          showSlide(currentSlideIndex + 1);
+      }, 3000); // Change slide every 3 seconds
+  }
 
-function updateDots() {
-    const activeIndex = Math.round(Math.abs(currentTranslate) / slides[0].clientWidth);
-    dots.forEach((dot, index) => {
-        dot.classList.toggle('active', index === activeIndex);
-    });
-    currentSlideIndex = activeIndex; // Update the current slide index
-}
+  // Start auto move
+  startAutoMove();
 
-function currentSlide(index) {
-    showSlide(index);
-}
+  // Touch and Mouse Events
+  function startDrag(event) {
+      isDragging = true;
+      startPos = getPositionX(event);
+      animationID = requestAnimationFrame(animation);
+  }
 
-function buyNow() {
-    alert("Redirecting to purchase page...");
-}
+  function endDrag() {
+      isDragging = false;
+      cancelAnimationFrame(animationID);
 
-// Touch and Mouse Events
-function startDrag(event) {
-    isDragging = true;
-    startPos = getPositionX(event);
-    animationID = requestAnimationFrame(animation);
-}
+      const movedBy = currentTranslate - prevTranslate;
 
-function endDrag() {
-    isDragging = false;
-    cancelAnimationFrame(animationID);
+      if (movedBy < -100 && currentSlideIndex < slides.length - 1) {
+          currentSlideIndex += 1;
+      }
+      if (movedBy > 100 && currentSlideIndex > 0) {
+          currentSlideIndex -= 1;
+      }
 
-    const movedBy = currentTranslate - prevTranslate;
+      setPositionByIndex();
+      updateDots(); // Ensure dots are updated after drag ends
+  }
 
-    if (movedBy < -100 && currentSlideIndex < slides.length - 1) {
-        currentSlideIndex += 1;
-    }
-    if (movedBy > 100 && currentSlideIndex > 0) {
-        currentSlideIndex -= 1;
-    }
+  function drag(event) {
+      if (isDragging) {
+          const currentPosition = getPositionX(event);
+          currentTranslate = prevTranslate + currentPosition - startPos;
+          setSliderPosition();
+      }
+  }
 
-    setPositionByIndex();
-    updateDots(); // Ensure dots are updated after drag ends
-}
+  function getPositionX(event) {
+      return event.type.includes('mouse') ? event.pageX : event.touches[0].clientX;
+  }
 
-function drag(event) {
-    if (isDragging) {
-        const currentPosition = getPositionX(event);
-        currentTranslate = prevTranslate + currentPosition - startPos;
-        setSliderPosition();
-    }
-}
+  function animation() {
+      setSliderPosition();
+      if (isDragging) requestAnimationFrame(animation);
+  }
 
-function getPositionX(event) {
-    return event.type.includes('mouse') ? event.pageX : event.touches[0].clientX;
-}
+  function setSliderPosition() {
+      sliderContainer.style.transform = `translateX(${currentTranslate}px)`;
+      updateDots(); // Update dots during dragging
+  }
 
-function animation() {
-    setSliderPosition();
-    if (isDragging) requestAnimationFrame(animation);
-}
+  function setPositionByIndex() {
+      currentTranslate = currentSlideIndex * -slides[0].clientWidth;
+      prevTranslate = currentTranslate;
+      setSliderPosition();
+  }
 
-function setSliderPosition() {
-    sliderContainer.style.transform = `translateX(${currentTranslate}px)`;
-    updateDots(); // Update dots during dragging
-}
+  // Add event listeners for touch and mouse events
+  sliderContainer.addEventListener('touchstart', startDrag);
+  sliderContainer.addEventListener('touchend', endDrag);
+  sliderContainer.addEventListener('touchmove', drag);
 
-function setPositionByIndex() {
-    currentTranslate = currentSlideIndex * -slides[0].clientWidth;
-    prevTranslate = currentTranslate;
-    setSliderPosition();
-}
+  sliderContainer.addEventListener('mousedown', startDrag);
+  sliderContainer.addEventListener('mouseup', endDrag);
+  sliderContainer.addEventListener('mouseleave', endDrag);
+  sliderContainer.addEventListener('mousemove', drag);
 
-// Add event listeners for touch and mouse events
-sliderContainer.addEventListener('touchstart', startDrag);
-sliderContainer.addEventListener('touchend', endDrag);
-sliderContainer.addEventListener('touchmove', drag);
-
-sliderContainer.addEventListener('mousedown', startDrag);
-sliderContainer.addEventListener('mouseup', endDrag);
-sliderContainer.addEventListener('mouseleave', endDrag);
-sliderContainer.addEventListener('mousemove', drag);
-
-window.addEventListener('resize', updateSlider);
-updateSlider();
+  window.addEventListener('resize', updateSlider);
+  updateSlider();
 
 // second slider
 document.addEventListener("DOMContentLoaded", function() {
@@ -216,4 +214,22 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     });
   });
+
   
+  //slide load
+
+// detect error
+const express = require('express');
+const enforce = require('express-sslify');
+
+const app = express();
+
+// Redirect HTTP to HTTPS
+app.use(enforce.HTTPS({ trustProtoHeader: true }));
+
+// Your other middleware and routes
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+});

@@ -672,3 +672,20 @@ footer {
 
   }
   
+  /* slider updated */
+  .slidess {
+    position: relative;
+    width: 100%;
+    max-width: 600px;
+    margin: auto;
+    overflow: hidden;
+}
+.son {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+}
+.image-section {
+    min-width: 100%;
+    box-sizing: border-box;
+}
+

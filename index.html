@@ -1,9 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Al-Awaji Real Estate</title>
+    <meta name="description" content="شركة العواجي هي إحدى الشركات الرائدة في مجال العقارات والضيافة في المدينة المنورة، بخبرة تمتد لأكثر من 25 عامًا . نقدم حلولًا سكنية متميزة تجمع بين الجودة والراحة، ونركز على تقديم وتطوير وحدات سكنية متكاملة تلبي احتياجات العملاء وتطلعاتهم.">
+    <title>العواجي العقارية  </title>
+    
     <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap" rel="stylesheet">
     <!-- font awesome cdn link  -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -12,7 +14,7 @@
 <body>
     <nav class="navbar">
         <div class="navbar-container">
-            <a href="#" class="logo"><img src="images/logo-1.webp" alt=""></a>
+            <a href="#" class="logo"><img src="images/logo-1.webp" alt="logo" class="lazy"></a>
             <ul class="nav-links">
                 <li><a href="#home">الصفحه الرئيسية</a></li>
                 <li><a href="#about">من نحن</a></li>
@@ -25,6 +27,7 @@
             </div>
         </div>
     </nav>
+
     <section class="home" id="home">
         <div class="container">
             <div class="text-content">
@@ -37,7 +40,7 @@
                  <a class="btn" href="https://wa.me/966565895110">تواصل معنا </a>
             </div>
             <div class="illustration">
-                <img src="images/Discussion illustration.png" alt="Business Illustration">
+                <img src="images/sCKCZMKZ-SwissotelMakkah.jpg" alt="Business Illustration" class="lazy">
             </div>
         </div>
     </section>
@@ -74,11 +77,69 @@
                     </div>
                 </div>
             </div>
+           <div class="slidess" >
+          <div class="son" id="son">
             <div class="image-section">
-                <img src="images/sCKCZMKZ-SwissotelMakkah.jpg" alt="Decorative Image">
+                <img src="images/sCKCZMKZ-SwissotelMakkah.jpg" alt="Decorative Image" >
             </div>
+            <div class="image-section">
+                <img src="images/Artboard 1 copy 4.png" alt="Decorative Image" >
+            </div>
+            <div class="image-section">
+                <img src="images/sCKCZMKZ-SwissotelMakkah.jpg" alt="Decorative Image" >
+            </div>
+          </div>
+           </div>
+           <script>
+            // Slider functionality
+            let slideIndex = 0;
+        const sliderSection = document.getElementById('son');
+        const slideItems = sliderSection.querySelectorAll('.image-section');
+        const dotItems = document.querySelectorAll('.dot');
+        const slidesContainer = sliderSection;
+
+        function showSlide(index) {
+            if (index >= slideItems.length) {
+                slideIndex = 0;
+            } else if (index < 0) {
+                slideIndex = slideItems.length - 1;
+            } else {
+                slideIndex = index;
+            }
+            updateSlider();
+        }
+
+        function updateSlider() {
+            const width = slideItems[0].clientWidth;
+            slidesContainer.style.transform = `translateX(${-width * slideIndex}px)`;
+            updateDots();
+        }
+
+        function updateDots() {
+            dotItems.forEach((dot, index) => {
+                dot.classList.toggle('active', index === slideIndex);
+            });
+        }
+
+        function currentSlide(index) {
+            showSlide(index);
+        }
+
+        function startAutoMove() {
+            setInterval(() => {
+                showSlide(slideIndex + 1);
+            }, 3000); // Change slide every 3 seconds
+        }
+
+        // Start auto move
+        startAutoMove();
+
+        window.addEventListener('resize', updateSlider);
+        updateSlider();
+        </script>
         </div>
-    </section>
+       
+    </section>  
 
     <section class="fashion-slider" id="projects">
         <div class="slider-container">
@@ -246,6 +307,7 @@
 
             <!-- Add more dots as needed -->
         </div>
+        
     </section>
 
     <section class="servise" id="servise">
@@ -253,12 +315,12 @@
         <div class="service">
             <div class="wrapper">
 
-                <i id="left" class="fa-solid  fas fa-angle-left"></i>
+                <i id="left" class="fa-solid  fas fa-angle-left" ></i>
                 <ul class="carousel">
                     <li class="card">
                         <div class="img"><img src=
         "images/Artboard 1.png" 
-                                            alt="" draggable="false"> </div>
+        class="lazy"         alt="" draggable="false"> </div>
                         <h2 style=" font-weight:bold;">
                             نظافة اسبوعية مجانية 
                         </h2>
@@ -267,35 +329,35 @@
                     <li class="card">
                         <div class="img"><img src=
         "images/Artboard 1 copy 5.png" 
-                                            alt="" draggable="false"> </div>
+        class="lazy"                  alt="" draggable="false"> </div>
                         <h2 style=" font-weight:bold;">الدخول الذكي للوحدات السكنية
                         </h2>
                         
                     </li>
                     <li class="card">
                         <div class="img"><img src=
-        "images/Artboard 1 copy 4.png"  alt="" draggable="false"> </div>
+        "images/Artboard 1 copy 4.png"  alt="" class="lazy" draggable="false"> </div>
                         <h2 style=" font-weight:bold;">الحراسة  لضمان الأمان والراحة</h2>
                         
                     </li>
                     <li class="card">
                         <div class="img"><img src=
         "images/Artboard 1 copy 3.png" 
-                                            alt="" draggable="false"> </div>
+        class="lazy"        alt="" draggable="false"> </div>
                         <h2 style=" font-weight:bold;">المصاعد</h2>
                         
                     </li>
                     <li class="card">
                         <div class="img"><img src=
         "images/Artboard 1 copy 2.png" 
-                                            alt="" draggable="false"> </div>
+        class="lazy"                   alt="" draggable="false"> </div>
                         <h2 style=" font-weight:bold;">انترنت مجاني في الشقق</h2>
                         
                     </li>
                     <li class="card">
                         <div class="img"><img src=
         "images/Artboard 1 copy.png" 
-                                            alt="" draggable="false"> </div>
+        class="lazy"                      alt="" draggable="false"> </div>
                         <h2 style=" font-weight:bold;">الوحدات مكيفة بالكامل
                         </h2>
                         
@@ -303,7 +365,7 @@
                     <li class="card">
                         <div class="img"><img src=
         "images/Artboard 1.png" 
-                                            alt="" draggable="false"> </div>
+        class="lazy"                        alt="" draggable="false"> </div>
                         <h2 style=" font-weight:bold;">مكتب استقبال متاح طوال الوقت 
 
                         </h2>
@@ -319,7 +381,7 @@
    <!-- footer -->
    <div class="contact-us">
     <a href="https://wa.me/+966582075522">
-        <img src="images/WhatsApp_icon.png.webp" alt="">
+        <img src="images/WhatsApp_icon.png.webp" alt="WhatsApp_icon">
     </a>
 </div>
    <footer>
