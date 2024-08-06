@@ -3,7 +3,6 @@ function toggleMenu() {
     const navLinks = document.querySelector('.nav-links');
     navLinks.classList.toggle('active');
 }
-
 let currentSlideIndex = 0;
 const slides = document.querySelectorAll('.slide');
 const dots = document.querySelectorAll('.dot');
@@ -15,7 +14,10 @@ let currentTranslate = 0;
 let prevTranslate = 0;
 let animationID;
 let autoMoveInterval;
+const slideDuration = 3000; // Duration to show each slide (3 seconds)
+const delayBetweenSlides = 3000; // Delay between slides (0.5 seconds)
 
+// Function to show the slide
 function showSlide(index) {
     if (index >= slides.length) {
         currentSlideIndex = 0;
@@ -27,30 +29,35 @@ function showSlide(index) {
     updateSlider();
 }
 
+// Function to update the slider position
 function updateSlider() {
     currentTranslate = currentSlideIndex * -slides[0].clientWidth;
     sliderContainer.style.transform = `translateX(${currentTranslate}px)`;
     updateDots();
 }
 
+// Function to update the dots
 function updateDots() {
-    const activeIndex = Math.round(Math.abs(currentTranslate) / slides[0].clientWidth);
     dots.forEach((dot, index) => {
-        dot.classList.toggle('active', index === activeIndex);
+        dot.classList.toggle('active', index === currentSlideIndex);
     });
-    currentSlideIndex = activeIndex; // Update the current slide index
 }
 
+// Function to set the current slide
 function currentSlide(index) {
     showSlide(index);
 }
 
+// Function to start the auto move with delay between slides
 function startAutoMove() {
     autoMoveInterval = setInterval(() => {
-        showSlide(currentSlideIndex + 1);
-    }, 3000); // Change slide every 3 seconds
+        setTimeout(() => {
+            showSlide(currentSlideIndex + 1);
+        }, delayBetweenSlides);
+    }, slideDuration + delayBetweenSlides);
 }
 
+// Function to stop the auto move
 function stopAutoMove() {
     clearInterval(autoMoveInterval);
 }
@@ -58,14 +65,16 @@ function stopAutoMove() {
 // Start auto move
 startAutoMove();
 
-// Touch and Mouse Events
+// Function to start dragging
 function startDrag(event) {
     isDragging = true;
     startPos = getPositionX(event);
-    animationID = requestAnimationFrame(animation);
+    prevTranslate = currentTranslate;
     stopAutoMove(); // Stop auto move on user interaction
+    animationID = requestAnimationFrame(animation);
 }
 
+// Function to end dragging
 function endDrag() {
     isDragging = false;
     cancelAnimationFrame(animationID);
@@ -84,6 +93,7 @@ function endDrag() {
     startAutoMove(); // Restart auto move after user interaction
 }
 
+// Function to handle dragging
 function drag(event) {
     if (isDragging) {
         const currentPosition = getPositionX(event);
@@ -92,20 +102,23 @@ function drag(event) {
     }
 }
 
+// Function to get the position X
 function getPositionX(event) {
     return event.type.includes('mouse') ? event.pageX : event.touches[0].clientX;
 }
 
+// Function to animate the slider
 function animation() {
     setSliderPosition();
     if (isDragging) requestAnimationFrame(animation);
 }
 
+// Function to set the slider position
 function setSliderPosition() {
     sliderContainer.style.transform = `translateX(${currentTranslate}px)`;
-    updateDots(); // Update dots during dragging
 }
 
+// Function to set the position by index
 function setPositionByIndex() {
     currentTranslate = currentSlideIndex * -slides[0].clientWidth;
     prevTranslate = currentTranslate;
@@ -124,6 +137,40 @@ sliderContainer.addEventListener('mousemove', drag);
 
 window.addEventListener('resize', updateSlider);
 updateSlider();
+
+
+//homeslider
+document.addEventListener("DOMContentLoaded", function() {
+    const slides = document.querySelectorAll(".image-section");
+    const track = document.querySelector(".slide-track");
+    let currentIndex = 0;
+    const slideWidth = slides[0].clientWidth;
+    const totalSlides = slides.length;
+
+    function showSlide(index) {
+        track.style.transform = `translateX(-${slideWidth * index}px)`;
+    }
+
+    function nextSlide() {
+        currentIndex = (currentIndex + 1) % totalSlides;
+        showSlide(currentIndex);
+    }
+
+    setInterval(nextSlide, 3000);
+    showSlide(currentIndex);
+});
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 // second slider

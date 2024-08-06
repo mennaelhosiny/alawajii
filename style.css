@@ -150,7 +150,7 @@ body{
 }
 
 .illustration img {
-    max-width: 500px;
+    max-width: 550px;
     width: 100%;
     height: auto;
 }
@@ -184,7 +184,8 @@ body{
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
-.why-choose-us h2{
+
+.why-choose-us h2 {
     color: #1d3948;
 }
 
@@ -224,12 +225,6 @@ body{
     text-align: center;
 }
 
-.feature i {
-    font-size: 30px;
-    margin-right: 15px;
-    color: #f0a04b;
-}
-
 .feature h3 {
     font-size: 22px;
     margin: 0 0 5px;
@@ -241,11 +236,20 @@ body{
     color: #555;
 }
 
-.image-section {
-    flex: 1;
+.slidess {
+    overflow: hidden;
+    position: relative;
+    width: 50%;
+}
+
+.slide-track {
     display: flex;
-    justify-content: center;
-    align-items: center;
+    transition: transform 0.5s ease-in-out;
+}
+
+.image-section {
+    min-width: 100%;
+    transition: transform 0.5s ease-in-out;
 }
 
 .image-section img {
@@ -276,10 +280,11 @@ body{
         width: 100%;
     }
 
-    .image-section {
-        margin-top: 20px;
+    .slidess {
+        width: 100%;
     }
 }
+
 /* projects */
 .fashion-slider {
     position: relative;
@@ -478,11 +483,16 @@ body{
     }
 }
 
+
+/* servise */
 .servise{
     background: #1d3948;
     min-height: 100vh;
     align-items: center;
     justify-content: center;
+    box-sizing: border-box;
+     margin: 0;
+     padding: 0;
 
 }
 .servise h1{
@@ -496,6 +506,8 @@ body{
     display: flex;
     align-items: center;
     justify-content: center;
+    direction: rtl;
+
 }
 .wrapper {
     max-width: 1100px;
@@ -534,7 +546,8 @@ body{
 .wrapper .carousel {
     display: grid;
     grid-auto-flow: column;
-    grid-auto-columns: calc((100% / 3) - 12px);
+    grid-auto-columns: calc((100% / 3) - 1px);
+    scrollbar-width: none; /* Changed to none for better compatibility */
     gap: 16px;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
@@ -579,6 +592,7 @@ body{
     align-items: center;
     justify-content: center;
     flex-direction: column;
+    margin: auto;
 }
 
 .card .img {
@@ -613,14 +627,14 @@ body{
 
 @media screen and (max-width: 900px) {
     .wrapper .carousel {
-        grid-auto-columns: calc((100% / 2) - 9px);
+        grid-auto-columns: calc((100% / 2) - -8px);
 
     }
 }
 
 @media screen and (max-width: 600px) {
     .wrapper .carousel {
-        grid-auto-columns: 100%;
+        grid-auto-columns: calc((100% / 1) - -30px);
 
     }
 }
